@@ -66,6 +66,7 @@ class NuancedROC:
             the subgroup and 0 indicating it is not. There should be no other values
             besides 1 or 0 in the dataframe."""
 
+        import numpy as np
         import pandas as pd
         from sklearn.metrics import roc_auc_score
 
@@ -104,37 +105,40 @@ class NuancedROC:
             
         input_df = pd.concat([y_true, y_pred, subgroup_df], axis=1)
 
-        self.output_df = pd.DataFrame(index=subgroup_df.columns, columns=['SG roc', 'BPSN roc', 'BNSP roc'])
+        self.output_df = pd.DataFrame(index=subgroup_df.columns, columns=['SG-ROC', 'BPSN-ROC', 'BNSP-ROC'])
 
         for col in subgroup_df.columns:
             self.output_df.loc[col] = [calc_SG_roc(col, input_df), 
                                        calc_BPSN_roc(col, input_df), 
                                        calc_BNSP_roc(col, input_df)]
 
+        self.model_roc = roc_auc_score(y_true=y_true, y_score=y_pred)
+
+        self.mean_SG_roc = self.output_df['SG-ROC'].mean()
+
+        self.mean_BPSN_roc = self.output_df['BPSN-ROC'].mean()
+
+        self.mean_BNSP_roc = self.output_df['BNSP-ROC'].mean()
+
+        self.mean_bias_roc = np.mean([self.output_df['SG-ROC'].mean(), 
+                                      self.output_df['BPSN-ROC'].mean(), 
+                                      self.output_df['BNSP-ROC'].mean()])
+
+        print(f'Model ROC: {self.model_roc}')
+        print('---')
         print(self.output_df)
             
-    def mean_SG_roc(self):
-        return self.output_df['SG roc'].mean()
 
-    def mean_BPSN_roc(self):
-        return self.output_df['BPSN roc'].mean()
-
-    def mean_BNSP_roc(self):
-        return self.output_df['BNSP roc'].mean()
-
-    def mean_roc(self):
-        import numpy as np
-        return np.mean([self.output_df['SG roc'].mean(), 
-                        self.output_df['BPSN roc'].mean(), 
-                        self.output_df['BNSP roc'].mean()])
 
     def summary(self):
-        print(f'Mean roc: {self.mean_roc()}')
+        print(f'Model ROC: {self.model_roc}')
         print()
-        print(f'Mean SG roc: {self.mean_SG_roc()}')
+        print(f'Mean Bias ROC: {self.mean_bias_roc}')
         print()
-        print(f'Mean BPSN roc: {self.mean_BPSN_roc()}')
+        print(f'Mean SG ROC: {self.mean_SG_roc}')
         print()
-        print(f'Mean BNSP roc: {self.mean_BNSP_roc()}')   
+        print(f'Mean BPSN ROC: {self.mean_BPSN_roc}')
+        print()
+        print(f'Mean BNSP ROC: {self.mean_BNSP_roc}')   
         print()
         print(self.output_df)
