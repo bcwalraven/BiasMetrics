@@ -8,7 +8,7 @@ setup(
   author = 'Brandon Walraven',
   author_email = '',      
   url = 'https://github.com/bcwalraven',
-  download_url = 'https://github.com/bcwalraven/biasMetrics/archive/v0.01.tar.gz',    
+  download_url = 'https://github.com/bcwalraven/biasMetrics/archive/v0.02.tar.gz',    
   keywords = ['AUC', 'Classification', 'Metrics'],   
   install_requires=[           
           'numpy',
