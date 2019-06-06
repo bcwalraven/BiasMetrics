@@ -4,7 +4,7 @@ setup(
   packages = ['biasMetrics'],
   version = '0.2.5',      
   license='MIT',        
-  description = 'AUC ROC based classification metrics to determine bias in underrepresented subpopulations.',  
+  description = 'Set of classification metrics to determine bias in underrepresented subpopulations.',  
   author = 'Brandon Walraven',
   author_email = '',      
   url = 'https://github.com/bcwalraven',
@@ -13,6 +13,8 @@ setup(
   install_requires=[           
           'numpy',
           'pandas',
-          'sklearn'
+          'seaborn'
+          'sklearn',
+          'scipy'
       ],
 )
